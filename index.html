@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Advent Calendar</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+   :root {
+     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+     background: #123;
+     color: #fff;
+   }
+
+
+   body {
+     margin: 0;
+     min-height: 100vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 1rem;
+   }
+
+
+   .calendar-wrapper {
+     max-width: 900px;
+     margin: 0 auto;
+     text-align: center;
+   }
+
+
+   h1 {
+     margin-bottom: 0.5rem;
+     font-size: 2rem;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+   }
+
+
+   p.subtitle {
+     margin-top: 0;
+     margin-bottom: 1.5rem;
+     opacity: 0.8;
+     font-size: 0.9rem;
+   }
+
+
+   .calendar {
+     display: grid;
+     grid-template-columns: repeat(6, minmax(70px, 1fr));
+     gap: 0.75rem;
+   }
+
+
+   @media (max-width: 600px) {
+     .calendar {
+       grid-template-columns: repeat(4, minmax(70px, 1fr));
+     }
+   }
+
+
+   .door {
+     position: relative;
+     aspect-ratio: 3 / 4;
+     border: none;
+     background: linear-gradient(135deg, #235, #468);
+     border-radius: 0.6rem;
+     cursor: pointer;
+     overflow: hidden;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+     transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+     padding: 0;
+   }
+
+
+   .door:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+     background: linear-gradient(135deg, #2a4d7a, #5a8cc7);
+   }
+
+
+   .door:focus-visible {
+     outline: 3px solid #ffc857;
+     outline-offset: 2px;
+   }
+
+
+   .door-number {
+     position: absolute;
+     inset: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 1.8rem;
+     font-weight: 700;
+     color: #ffc857;
+     text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+     transition: opacity 0.25s ease;
+     z-index: 1;
+   }
+
+
+   .door-image {
+     position: absolute;
+     inset: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     opacity: 0;
+     transform: scale(1.08);
+     transition: opacity 0.25s ease, transform 0.25s ease;
+   }
+
+
+   .door.open .door-number {
+     opacity: 0;
+   }
+
+
+   .door.open .door-image {
+     opacity: 1;
+     transform: scale(1);
+   }
+
+
+   .footer-note {
+     margin-top: 1rem;
+     font-size: 0.8rem;
+     opacity: 0.7;
+   }
+ </style>
+</head>
+<body>
+ <main class="calendar-wrapper">
+   <h1>Advent Calendar</h1>
+   <p class="subtitle">Click a door to reveal the picture!</p>
+
+
+   <div id="calendar" class="calendar" aria-label="Advent calendar"></div>
+
+
+   <p class="footer-note">
+     Hosted with GitHub Pages • Add your own images in the <code>images</code> folder.
+   </p>
+ </main>
+
+
+ <script>
+   // Configure your images here if you want custom filenames per day.
+   // By default this expects images/day1.webp ... images/day24.webp
+   const days = Array.from({ length: 24 }, (_, i) => {
+     const dayNumber = i + 1;
+     return {
+       day: dayNumber,
+       img: `images/day${dayNumber}.webp`,
+       alt: `Day ${dayNumber}`
+     };
+   });
+
+
+   const calendar = document.getElementById("calendar");
+
+
+   days.forEach(({ day, img, alt }) => {
+     const button = document.createElement("button");
+     button.className = "door";
+     button.setAttribute("type", "button");
+     button.setAttribute("aria-label", `Open day ${day}`);
+
+
+     button.innerHTML = `
+       <span class="door-number">${day}</span>
+       <img src="${img}" alt="${alt}" class="door-image">
+     `;
+
+
+     button.addEventListener("click", () => {
+       button.classList.toggle("open");
+     });
+
+
+     calendar.appendChild(button);
+   });
+ </script>
+</body>
+</html>
 
